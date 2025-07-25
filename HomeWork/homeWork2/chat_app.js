@@ -10,6 +10,7 @@ emitter.on('message', (data) => {
     console.log(`${data.user}: ${data.text}`);
 });
 
-sendMessage('Анна', 'Привет всем!', emitter);
-sendMessage('Иван', 'Привет, Анна!', emitter);
-sendMessage('Олег', 'Как дела?', emitter);
+sendMessage('Аnna', 'Hallo!', emitter);
+sendMessage('Ivan', 'Hallo, Anna!', emitter);
+sendMessage('Оleg', 'how are you?', emitter);
+sendMessage('Anna', 'Everything is fine!', emitter);
