@@ -1,19 +1,18 @@
-import pool from './db.js';
+import { db } from './db.js';
 
-const createTable = async () => {
-  try {
-    const sql = `
-      CREATE TABLE IF NOT EXISTS products (
-        id INT AUTO_INCREMENT PRIMARY KEY,
-        name VARCHAR(255) NOT NULL,
-        price DECIMAL(10, 2) NOT NULL
-      )
-    `;
-    await pool.query(sql);
-    console.log('Таблица products создана');
-  } catch (err) {
-    console.error('Ошибка при создании таблицы:', err);
+const createTable = `
+  CREATE TABLE IF NOT EXISTS products (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    price DECIMAL(10, 2) NOT NULL
+  );
+`;
+
+db.query(createTable, (err, result) => {
+  if (err) {
+    console.error('Error creating table: ', err);
+  } else {
+    console.log('Table "products" has been created or already exists');
   }
-};
-
-createTable();
+  db.end();
+});
