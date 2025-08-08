@@ -11,9 +11,9 @@ const registerUser = async () => {
       username: 'testuser',
       password: 'testpassword',
     });
-    console.log(response.data);
+    console.log('Ответ сервера: ' + response.data);
   } catch (error) {
-    console.error('Error registering user:', error);
+    console.error('Error registering user:', error.response?.data || error.message);
   }
 };
 
@@ -23,15 +23,38 @@ const loginUser = async () => {
       username: 'testuser',
       password: 'testpassword',
     });
-    console.log(response.data);
+    console.log('Ответ сервера: ' + response.data);
   } catch (error) {
     console.error('Error login user:', error);
+  }
+};
+
+const getUserById = async () => {
+  try {
+    const response = await axios.get(`${URL}/profile/1`);
+    console.log('Oтвет от сервера: ' + JSON.stringify(response.data));
+  } catch (error) {
+    console.error('Error getUserById:', error.message);
+  }
+};
+
+const updateUserById = async () => {
+  try {
+    const response = await axios.put(`${URL}/profile/1`, {
+      email: 'newemail@gmail.com',
+      name: 'Bob',
+    });
+    console.log(JSON.stringify(response.data));
+  } catch (error) {
+    console.error('Error getting user by ID:', error.message);
   }
 };
 
 (async () => {
   await registerUser();
   await loginUser();
+  await getUserById();
+  await updateUserById();
 })();
 
 

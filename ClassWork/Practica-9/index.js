@@ -22,7 +22,6 @@ const users = [
         name: 'User Two'
     }
 ];
-
 app.use(express.json()); // Это midlware
 
 app.use((req, _res, next) => {  // Это midlware где присваиваем новое свойство id: 1
@@ -30,13 +29,13 @@ app.use((req, _res, next) => {  // Это midlware где присваиваем
     next();
 });
 
-
 app.get('/profile/:id', (req, res) => {
     const userId = parseInt(req.params.id, 10);
     if (req.user.id !== userId){
         return res.status(403).send('Доступ запрещен')
     }
-    const user = users.find(u => u.id === userId);
+    const user = users.find((user) => user.id === userId);
+    console.log(user)
     if (!user) {
         return res.status(404).send('Пользователь не найден')
     }
@@ -47,17 +46,68 @@ app.get('/profile/:id', (req, res) => {
     });
 });
 
-app.post('/register', async (req, res) => {
-    const {username, password} = req.body;
-    try {
-        const heshedPassword = await bcrypt.hash(password, 12);
-        users.push({username, password: heshedPassword});
-        res.status(201).send('User was created');
-
-    } catch (error) {
-        console.error('Erro register: ', error);
-        res.status(500).send('Error register');
+app.put('/profile/:id', (req, res) => {
+    const userId = parseInt(req.params.id, 10);
+    if (req.user.id !== userId){
+        return res.status(403).send('Доступ запрещен')
     }
+    const user = users.find((user) => user.id === userId);
+    console.log(user)
+    if (!user) {
+        return res.status(404).send('Пользователь не найден')
+    }
+    const { email, name} = req.body;
+    if (email) {
+        user.email = email;
+    }
+    if (name) {
+        user.name = name;
+    }
+    res.send('Профиль обновлен');
+    console.log(JSON.stringify(users, null, 2));
+});
+
+// app.post('/register', async (req, res) => {
+//     const {username, password} = req.body;
+//     try {
+//         const hashedPassword = await bcrypt.hash(password, 12);
+//         users.push({username, password: hashedPassword});
+//         res.status(201).send('User was created');
+
+//     } catch (error) {
+//         console.error('Erro register: ', error);
+//         res.status(500).send('Error register');
+//     }
+// });
+
+app.post('/register', async (req, res) => {
+  const { username, password } = req.body;
+
+  if (!username || !password) {
+    return res.status(400).send('Username and password are required');
+  }
+
+  // Проверка на существующего пользователя
+  const existingUser = users.find(user => user.username === username);
+  if (existingUser) {
+    return res.status(400).send('User already exists');
+  }
+
+  try {
+    const hashedPassword = await bcrypt.hash(password, 12);
+    const newUser = {
+      id: users.length + 1,
+      username,
+      password: hashedPassword,
+      email: '',
+      name: ''
+    };
+    users.push(newUser);
+    res.status(201).send('User was created');
+  } catch (error) {
+    console.error('Error register: ', error);
+    res.status(500).send('Error register');
+  }
 });
 
 app.post('/login', async (req, res) => {
@@ -77,7 +127,7 @@ app.post('/login', async (req, res) => {
        res.send('Successful login');
     } catch (err) {
         console.error('Error login', err);
-        res.status(500).send('Error login: ', err)
+        res.status(500).send('Error login: ' + err)
     }
 });
 
