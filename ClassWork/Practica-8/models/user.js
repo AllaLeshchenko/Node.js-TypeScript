@@ -1,11 +1,11 @@
 import { DataTypes } from "sequelize";
-import sequelize from './config/db.js';
+import sequelize from '../config/db.js';
 
 const User = sequelize.define('User', {
      id: {
         type: DataTypes.INTEGER,
         autoIncrement: true,
-        primeryKey: true,
+        primaryKey: true,
         allowNull: false,
     },
     name: {

@@ -16,10 +16,10 @@ const Post = sequelize.define('Post', {
         type: DataTypes.TEXT,
         allowNull: false,
     },
-     userId: {
+     userId: {                   // Это вторичный ключ (внешний), связывающий Post c User
         type: DataTypes.INTEGER,
         allowNull: false,
-        references: {
+        references: {            // Здесь прописано на что будет ссылатся ключ
             model: 'Users',
             key: 'id'
         }

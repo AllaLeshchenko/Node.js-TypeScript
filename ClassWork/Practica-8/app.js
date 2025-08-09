@@ -1,5 +1,6 @@
 import express from 'express';
 import sequelize from './config/db.js';
+import User from './models/user.js';
 import dotenv from 'dotenv';
 dotenv.config();
 
@@ -12,6 +13,7 @@ app.get('/', (_req, res) => {
     res.send('Main page');
 });
 
+// Создание нового пользователя
 app.get('/createUser', (req, res) => {
     const { name, email } = req.query;
     try {
@@ -29,6 +31,6 @@ app.listen(PORT, async () => {
         console.log('Connection to the database has been successfully');
         console.log(`Server running on http://localhost:${PORT}`);
     } catch (error) {
-        console.log('Error: ' + error);
+        console.error('Error: ' + error);
     }
 });
