@@ -19,44 +19,71 @@ sequelize.authenticate()
   .then(() => console.log('DB connected'))
   .catch(err => console.error('DB connection error:', err));
 
-// Настройка маршрута для получения списка всех книг:
-app.get('/books', async (_req, res) => {
-  const books = await Book.findAll();
-  res.json(books);
+// GET маршрут для получения списка всех книг
+app.get('/books', async (req, res) => {
+  try {
+    const books = await Book.findAll();
+    res.json(books);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to fetch books' });
+  }
 });
 
-// Настройка POST маршрута для создания записи
+// POST маршрут для создания новой книги
 app.post('/books', async (req, res) => {
-  const { title, author, year } = req.body;
-  const book = await Book.create({ title, author, year });
-  res.status(201).json(book);
+  try {
+    const newBook = await Book.create(req.body);
+    res.status(201).json(newBook);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to create book' });
+  }
 });
 
-// Настройка PUT маршрута для обновления записи
+// PUT маршрут для обновления книги по её id
 app.put('/books/:id', async (req, res) => {
-  const { title, author, year } = req.body;
-  const { id } = req.params;
-  await Book.update({ title, author, year }, { where: { id } });
-  res.json({ message: 'Book updated' });
-});
-
-// Настройка DELETE маршрута для удаления записи
-app.delete('/books/:id', async (req, res) => {
-  const { id } = req.params;
-  await Book.destroy({ where: { id } });
-  res.json({ message: 'Book deleted' });
-});
-
-
-app.listen(PORT, async () => {
-    try {
-        await sequelize.authenticate();
-        console.log('Connection to the database has been successfully');
-        console.log(`Server running on http://localhost:${PORT}`);
-    } catch (error) {
-        console.error('Error: ' + error);
+  try {
+    const [updated] = await Book.update(req.body, {
+      where: { id: req.params.id },
+    });
+    if (updated) {
+      const updatedBook = await Book.findOne({ where: { id: req.params.id } });
+      res.status(200).json(updatedBook);
+    } else {
+      res.status(404).json({ error: 'Book not found' });
     }
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to update book' });
+  }
 });
+
+// DELETE маршрут для удаления книги по её id
+app.delete('/books/:id', async (req, res) => {
+  try {
+    const deleted = await Book.destroy({
+      where: { id: req.params.id },
+    });
+    if (deleted) {
+      res.status(204).json({ message: 'Book deleted' });
+    } else {
+      res.status(404).json({ error: 'Book not found' });
+    }
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to delete book' });
+  }
+});
+
+// Запуск сервера
+app.listen(PORT, async () => {
+  try {
+    await sequelize.authenticate();
+    console.log('Connection to the database has been established successfully.');
+    console.log(`Server is running on http://localhost:${PORT}`);
+  } catch (error) {
+    console.error('Unable to connect to the database:', error);
+  }
+});
+
+
 
 
 
@@ -78,7 +105,6 @@ app.listen(PORT, async () => {
 
 // 6. Проверить удаление (GET /books):
 // Invoke-RestMethod -Uri http://localhost:3000/books -Method GET
-
 
 
 
