@@ -1,20 +1,23 @@
+import { Sequelize } from "sequelize";
+import configData from './config.js';
 import dotenv from 'dotenv';
 dotenv.config();
 
-const { Sequelize } = require("sequelize");
-const config = require('./config.json').development;
-
-
 const env = process.env.NODE_ENV || 'development';
 
-const sequelize = new Sequelize(
-  config.database,
-  config.username,
-  config.password,
-  {
-    host: config.host,
-    dialect: config.dialect,
-  }
-);
+const config = configData[env];
 
-module.exports = sequelize;
+console.log(JSON.stringify(config));
+
+// Создаем экземпляр Sequelize
+const sequelize = new Sequelize(
+    config.database,
+    config.username,
+    config.password,
+    {
+        host: config.host,
+        dialect: config.dialect,
+    }
+)
+
+export default sequelize;

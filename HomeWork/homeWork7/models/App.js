@@ -1,4 +1,6 @@
-module.exports = (sequelize, DataTypes) => {
+import { DataTypes } from "sequelize";
+import sequelize from "../config/db.js";
+
   const App = sequelize.define('App', {
     id: {
       type: DataTypes.INTEGER,
@@ -18,5 +20,4 @@ module.exports = (sequelize, DataTypes) => {
     timestamps: false,
   });
 
-  return App;
-};
+export default App;
