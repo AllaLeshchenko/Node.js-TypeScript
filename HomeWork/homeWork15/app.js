@@ -16,12 +16,9 @@ const io = new Server(server);
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+// Подключаем папку public как источник статики
+app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
-
-// Отдача HTML-файла
-app.get('/', (_, res) => {
-    res.sendFile(path.join(__dirname, 'index.html'));
-});
 
 // Обработка WebSocket-соединения
 io.on('connection', (socket) => {
