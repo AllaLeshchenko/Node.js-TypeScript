@@ -1,7 +1,0 @@
-GET, /
-GET, /favicon.ico
-GET, /
-[2025-07-30 13:20:47] GET /
-[2025-07-30 13:20:47] GET /favicon.ico
-[2025-07-30 13:20:53] GET /about
-[2025-07-30 13:20:53] GET /favicon.ico
