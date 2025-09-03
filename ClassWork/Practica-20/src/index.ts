@@ -115,33 +115,51 @@ console.log(config.version);
 // Для этого создайте статический массив `users` в классе `User`, куда будете добавлять созданных пользователей.
 // 2. Переопределение метода greet
 // Вклассе `Admin` переопределите метод `greet()`, чтобы он выводил сообщение о том, что пользователь является администратором.
-class User {
-    static users: User[] = [];
+// class User {
+//     static users: User[] = [];
 
-    constructor(public name: string) {
-        User.users.push(this)
-    }
-    greet(): void {
-        console.log(`Hello, i am user ${this.name}`);
-    }
-}
-class Admin extends User {
-    constructor(name: string) {
-        super(name)
-    }
-    greet(): void {
-        console.log(`Hello, i am admin ${this.name}`)
-    }
-    displayUser(): void {
-        console.log(`Users list : `);
-        User.users.forEach((user, index) => console.log(`${index + 1}. ${user.name}`));
-    }
-}
- const user1 = new User('Alex');
- const user2 = new User('Anna');
- const admin = new Admin('olga');
+//     constructor(public name: string) {
+//         User.users.push(this)
+//     }
+//     greet(): void {
+//         console.log(`Hello, i am user ${this.name}`);
+//     }
+// }
+// class Admin extends User {
+//     constructor(name: string) {
+//         super(name)
+//     }
+//     greet(): void {
+//         console.log(`Hello, i am admin ${this.name}`)
+//     }
+//     displayUser(): void {
+//         console.log(`Users list : `);
+//         User.users.forEach((user, index) => console.log(`${index + 1}. ${user.name}`));
+//     }
+// }
+//  const user1 = new User('Alex');
+//  const user2 = new User('Anna');
+//  const admin = new Admin('Olga');
 
- admin.greet();
- user1.greet();
- user2.greet();
- admin.displayUser();
+//  admin.greet();
+//  user1.greet();
+//  user2.greet();
+//  admin.displayUser();
+
+
+ // Работа с фабричными методами
+ class User {
+    constructor(public name: string, public role: string) {}
+
+    // фабричный метод
+    static createAdmin(name: string): User{
+        return new User(name, 'admin');
+    }
+    static createGuest(name: string): User{
+        return new User(name, 'guest');
+    }
+ }
+
+const admin1 =  User.createAdmin('Alex');
+ User.createAdmin('Anna');
+ User.createGuest('Oleg')
