@@ -7,8 +7,8 @@ const transactionSchema = new mongoose.Schema({
 });
 
 const userSchema = new mongoose.Schema({
-    name: {type: String, required: true},
-    email: {type: String, required: true, unique: true},
+    // name: {type: String, required: true},
+    // email: {type: String, required: true, unique: true},
     initialBalance:{ type: Number, required: true, min: [0, 'Initial Balance cannot be negativ']},
     currentBalance:{ type: Number, required: true, min: [0, 'Current Balance cannot be negativ']},
     transactions: [transactionSchema]
