@@ -36,6 +36,24 @@ car.start();
 electricCar.start();
 
 
+// сокращенный вариант
+class Car1 {
+    constructor(public make: string, public year: number) {}
+
+    start(): void {
+        console.log('The car is starting');
+    }
+}
+class ElectricCar1 extends Car {
+    constructor(make: string, year: number, public batteryLevel: number) {
+        super(make,year);
+    }
+    start(): void {
+        console.log('The electric car is starting')
+    }
+}
+
+
 
 // Задание 2
 // Статический метод для создания объектов
@@ -62,3 +80,31 @@ console.log(product);
 // 3. В классе `BankAccount` должен быть публичный метод `getBalance()`, который возвращает текущий
 // баланс.
 // 4. Создайте объект и проверьте работу методов.
+class BankAccount {
+    protected balance: number;
+
+    constructor(initialBalance: number = 0) {
+        this.balance = initialBalance;
+    }
+
+    public deposit(amount: number): void {
+        if (amount > 0) {
+            this.balance += amount;
+        }
+    }
+
+    public withdraw(amount: number): void {
+        if (amount > 0 && amount <= this.balance) {
+            this.balance -= amount;
+        }
+    }
+
+    public getBalance(): number {
+        return this.balance;
+    }
+}
+
+const account = new BankAccount(100);
+account.deposit(50);
+account.withdraw(30);
+console.log(`Current balance: ${account.getBalance()}`);
