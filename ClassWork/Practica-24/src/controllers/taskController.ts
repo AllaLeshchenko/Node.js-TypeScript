@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { Task } from "models/Task";
 
 // создадим тип при получени входящих данные для обновления
@@ -31,11 +31,12 @@ export const getTasks = (_: Request, res: Response) => {
 }
 
 // Получить задачу по id
-export const getTaskById = (req: Request, res: Response) => {
+export const getTaskById = (req: Request, res: Response, next: NextFunction) => {
     const id: number = Number(req.params.id);
     const task = tasks.find(task => task.id === id);
 
     if(!task){
+        next(new Error('Error get task by id'))
         return res.status(404).send({error: 'Task not found'});
     }
     // возвращаем ответ 
